@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Новое объявление</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="col-lg-8 col-lg-offset-2 panel panel-default panel-primary">
+    <div class="panel-heading" style="text-align: center;">Добавить объвление</div>
+    <div class="panel-body">
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="category">Выберите категорию:</label>
+                <div class="col-sm-10">
+                    <select id="category" name="category">
+                        <option></option>
+                        <option th:each="c: ${categories}" th:value="${c.id}" th:text="${c.category}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="content">Содержание:</label>
+                <div class="col-sm-10">
+                    <textarea name="content" class="form-control" id="content" placeholder="Содержание объявления" rows="5" required="required"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="phone">Контактный номер:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="phone" class="form-control" id="phone" placeholder="номер телефона" required="required"/>
+                </div>
+            </div>
+        </form>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-default" onclick="add()">Добавить объявление</button>
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+<script type="application/javascript">
+    /*<![CDATA[*/
+
+    function add() {
+        var category = $("#category").val();
+        var content = $("#content").val();
+        var phone = $("#phone").val();
+
+        if(category === ""){
+            alert("Выберите категорию");
+            return;
+        }
+
+        if(content.length < 1){
+            alert("Заполните содержимое объявления");
+            return;
+        }
+
+        if(phone.length < 1){
+            alert("Укажите телефон");
+            return;
+        }
+
+        $.ajax({
+            method: "POST",
+            url: "/addBulletin",
+            data: {
+                category: category,
+                content: content,
+                phone: phone
+            },
+            success: function () {
+                alert("Объявление опубликовано");
+                location.replace("/")
+            }
+        });
+    }
+    /*]]>*/
+</script>
+</html>
